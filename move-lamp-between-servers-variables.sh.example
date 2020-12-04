@@ -1,0 +1,44 @@
+#!/bin/bash
+
+######################### Variables #########################
+# Remote server
+REMOTE_SERVER="server.myserver.com"                                             # URI without the protocol
+REMOTE_SSH_USERNAME="my_remote_username"                                        # Remote user with sudo permissions
+REMOTE_SSH_PORT="22"                                                            # Remote SSH port
+REMOTE_PATH_TO_BACKUP="/var/www/my_project/wordpress"                           # Remote path to backup
+REMOTE_PATH_TO_MAKE_THE_BACKUP="/tmp/"                                          # Remote path where the backup will be stored
+REMOTE_PROJECT_NAME="my_remote_project"                                         # Remote project name   
+REMOTE_MYSQL_HOST="localhost"                                                   # Remote MySQL host
+REMOTE_MYSQL_DATABASE="my_remote_project"                                       # Remote MySQL database
+REMOTE_MYSQL_USERNAME="my_remote_project"                                       # Remote MySQL username
+REMOTE_MYSQL_PASSWORD="QIIjU/IuSJdhqs1yLHFnjb+mr2eLSn+HMVm20xZ9yYYrUMhqch"      # Remote MySQL password
+REMOTE_LETSENCRYPT_PATH="/etc/letsencrypt/live/my_remote_project.com/"          # Remote path for the Let's Encrypt certificates
+USE_REMOTE_LETSENCRYPT_CERTIFICATES="yes"                                       # Do you want to use the remote certificates? Use "yes" or "no"                       
+
+# Local server
+LOCAL_NEW_USERNAME="new_user"                                                   # Local user to be created
+LOCAL_NEW_PASSWORD="4q1U8RTuh049MLEzpfaJTvFVWnA4jYfyj7t/6hojXYB42+Li0Qzkk0G3xp" # Password for the new local user. Use "openssl rand --base64 32" to create a random password
+LOCAL_PATH="/var/www/$LOCAL_NEW_USERNAME/wordpress"                             # Local path to restore the project files
+LOCAL_PATH_TO_STORE_CERTIFICATES="/var/www/$LOCAL_NEW_USERNAME/certificates"    # Local path to restore the certificates
+LOCAL_PATH_TO_STORE_THE_BACKUP="/tmp/"                                          # Local path where the backup will be stored
+LOCAL_PROJECT_NAME="my_local_project"                                           # Local project name
+LOCAL_MYSQL_DATABASE="my_local_project"                                         # Local MySQL database
+LOCAL_MYSQL_USERNAME="my_local_project"                                         # Local MySQL username. Use "openssl rand --base64 32" to create a random password
+LOCAL_MYSQL_PASSWORD="4bfFQe3rkQBoKOEznsmX8xo+1rv6L5I3nFv2SRgJVxoJST76s67L"     # Local MySQL password
+LOCAL_MYSQL_ADMIN_USERNAME="root"                                               # Local MySQL admin username
+LOCAL_MYSQL_ADMIN_PASSWORD="tsU3jLA5u009atc9MSusEYCZvqFPKpwjb44cuipKD5pPpandYV" # Local MySQL admin password
+LOCAL_PHP_FPM_VERSION="7.4"                                                     # Local PHP-FPM version
+LOCAL_SERVERNAME="mywebsite.com"                                                # Local servername (Apache parameter)
+LOCAL_SERVERALIAS="www.mywebsite.com subdomain.mywebsite.com"                   # Local serveralias (Apache parameter)
+LOCAL_PHP_FPM_MEMORY_LIMIT="256M"                                               # Local PHP-FPM memory limit (PHP-FPM parameter)
+
+TIMESTAMP=`date +%Y-%m-%dT%H:%M:%SZ`
+VERBOSE="v"                                                                     # Show verbose informatión? Use "v" (as yes) or empty string: "" (as no)
+
+# Screen colors
+# https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+
