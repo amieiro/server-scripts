@@ -24,7 +24,7 @@ MYSQL_ADMIN_PASSWORD="secret"                                                   
 REMOVE_CERTIFICATES="yes"                                                           # Do you want to remove SSL certificates? Use "yes" or "no"
 CERTIFICATES_ROOT_PATH="/etc/letsencrypt/"                                          # Root path for the SSL certificates
 CERT_PEM_FULL_PATH="/etc/letsencrypt/live/$PROJECT_DOMAIN/cert.pem"                 # Full path for the project SSL certificates
-
+CERT_BINARY_FULL_PATH="/usr/bin/certbot"                                            # Full path for the certbot binary. In old versions it is called
 TIMESTAMP=`date +%Y-%m-%dT%H:%M:%SZ`
 
 # Screen colors
