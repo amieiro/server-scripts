@@ -40,27 +40,27 @@ function load_environment_variables {
 function make_full_backup {
     if [ $MAKE_LOCAL_BACKUP = "yes" ]; then
         if [ $REMOVE_MYSQL_DATABASE = "yes" ]; then
-            echo -e "\n${YELLOW}Creating the MySQL database backup ${NC}" 
+            echo -e "\n${YELLOW}Creating the MySQL database backup: $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN.sql ${NC}" 
             mysqldump --user="$MYSQL_ADMIN_USERNAME" --password="$MYSQL_ADMIN_PASSWORD" $MYSQL_DATABASE > $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN.sql
             echo -e "${GREEN}Backup created ${NC}\n"
         fi
         if [ $REMOVE_PROJECT_FILES = "yes" ]; then
-            echo -e "\n${YELLOW}Creating a backup for the files ${NC}" 
+            echo -e "\n${YELLOW}Creating a backup for the files: $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN.tar.gz ${NC}" 
             tar czf $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN.tar.gz -C $PROJECT_FULL_PATH .
             echo -e "${GREEN}Backup created ${NC}\n" 
         fi
         if [ $REMOVE_CERTIFICATES = "yes" ]; then
-            echo -e "\n${YELLOW}Creating a backup for the certificates ${NC}" 
+            echo -e "\n${YELLOW}Creating a backup for the certificates: $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-certificates.tar.gz ${NC}" 
             sudo tar czf $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-certificates.tar.gz -C $CERTIFICATES_ROOT_PATH .
             echo -e "${GREEN}Backup created ${NC}\n"
         fi 
         if [ $REMOVE_FPM_SITE = "yes" ]; then
-            echo -e "\n${YELLOW}Creating a backup for the PHP-FPM files ${NC}" 
+            echo -e "\n${YELLOW}Creating a backup for the PHP-FPM files: $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-php-fpm.tar.gz ${NC}" 
             sudo tar czf $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-php-fpm.tar.gz -C $PHP_FPM_ROOT_PATH .
             echo -e "${GREEN}Backup created ${NC}\n"
         fi 
         if [ $REMOVE_APACHE_SITE = "yes" ]; then
-            echo -e "\n${YELLOW}Creating a backup for the Apache files ${NC}" 
+            echo -e "\n${YELLOW}Creating a backup for the Apache files: $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-apache.tar.gz ${NC}" 
             sudo tar czf $PATH_TO_STORE_THE_BACKUP$TIMESTAMP-$PROJECT_DOMAIN-apache.tar.gz -C $APACHE_ROOT_PATH .
             echo -e "${GREEN}Backup created ${NC}\n"
         fi 
@@ -72,12 +72,12 @@ function make_full_backup {
 
 function remove_fpm_site {
     if [ $REMOVE_FPM_SITE = "yes" ]; then
-        echo -e "${YELLOW}Deleting the PHP-FPM $LOCAL_PHP_FPM_VERSION config file: $FPM_CONFIG_FULL_PATH ${NC}" 
+        echo -e "${YELLOW}Deleting the PHP-FPM $PHP_FPM_VERSION config file: $FPM_CONFIG_FULL_PATH ${NC}" 
         rm $FPM_CONFIG_FULL_PATH
         echo -e "${GREEN}File deleted ${NC}\n"
-        echo -e "${YELLOW}Restarting the PHP-FPM $LOCAL_PHP_FPM_VERSION service ${NC}" 
-        systemctl reload php$LOCAL_PHP_FPM_VERSION-fpm
-        systemctl status php$LOCAL_PHP_FPM_VERSION-fpm --no-pager
+        echo -e "${YELLOW}Restarting the PHP-FPM $PHP_FPM_VERSION service ${NC}" 
+        systemctl reload php$PHP_FPM_VERSION-fpm
+        systemctl status php$PHP_FPM_VERSION-fpm --no-pager
         echo -e "${GREEN}Service restarted ${NC}\n" 
     fi
 }
@@ -141,7 +141,7 @@ function remove_mysql {
 function remove_certificates {
     if [ $REMOVE_CERTIFICATES = "yes" ]; then
         echo -e "${YELLOW}Revoking and deleting the certificates: $CERT_PEM_FULL_PATH ${NC}" 
-        certbot revoke --cert-path $CERT_PEM_FULL_PATH --delete-after-revoke
+        $CERT_BINARY_FULL_PATH revoke --cert-path $CERT_PEM_FULL_PATH --delete-after-revoke
         echo -e "${GREEN}Certificates revoked and deleted ${NC}\n"
     fi    
 }
