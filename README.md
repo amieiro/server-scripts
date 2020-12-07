@@ -2,14 +2,17 @@
 
 This project contains a set of scripts useful for handling Linux servers. 
 
-Currently there is only 1 script, which allows to automatically move 
-LAMP websites (WordPress, Magento, Laravel,...) between servers. 
+Currently there is only 2 scripts, which allows:
+* move a LAMP site between servers. 
+* remove a LAMP site in a server. 
+
+LAMP site: WordPress, Laravel, Symfony, Magento,...
 
 ## Scripts
 
 ### Move LAMP between servers
 
-This script move LAMP projects (WordPress/Magento/Laravel,...) between 
+This script move LAMP site (WordPress, Laravel, Symfony, Magento,...) between 
 different Linux Servers.
 
 Execute this script on the destination machine with root privileges. If you 
@@ -58,5 +61,35 @@ remote sudoer user.
 $ sudo move-lamp-between-servers.sh
 ```
 
-# License
+### Remove LAMP site
+
+This script remove a LAMP site (WordPress, Laravel, Symfony, Magento,...) in a Linux Server.
+
+This script executes these steps:
+* Make a full backup: files, MySQL, certificates and configuration (PHP-FPM and Apache).
+* Remove the PHP-FPM files and restart the service.
+* Remove the Apache files and restart the service if the Apache configuration is correct.
+* Remove the project files and restart the service.
+* Remove the username and its files.
+* Remove the MySQL database and the user.
+* Revoke and delete the Let's Encrypt certificate.
+
+To execute this script:
+* Create a new file with the variables:
+```
+$ cp remove-lamp-site-variables.sh.example remove-lamp-site-variables.sh
+```
+* Adjust the variables of the **remove-lamp-site-variables.sh** file to your needs.
+* Execute the script as sudo user:
+```
+$ sudo remove-lamp-site.sh
+```
+
+## Todo
+* Use sshpass to make the remote certificates backup.
+* Make optional the verbose configuration.
+* Make an option to delete the remote and the local backups.
+* Compress the SQL dump.
+
+## License
 [GNU Affero General Public License v3 or higher](https://www.gnu.org/licenses/agpl-3.0.en.html)

@@ -1,0 +1,35 @@
+USE_REMOTE_LETSENCRYPT_CERTIFICATES="yes"                                           # Do you want to use the remote certificates? Use "yes" or "no" 
+PROJECT_DOMAIN="www.example.com"                                                    # Domain used to get and renew the Let's Encrypt certificate. Seea in /etc/letsencrypt/live/
+USERNAME="username"                                                                 # Local username to remove
+PROJECT_FULL_PATH="/var/www/$USERNAME/wordpress/"                                   # Full path for the project
+MAKE_LOCAL_BACKUP="yes"                                                             # Do you want to make a full backup (files, MySQL, certificates and configuration) before deleting? Use "yes" or "no"
+PATH_TO_STORE_THE_BACKUP="/tmp/"                                                    # Path where the backup will be stored
+REMOVE_FPM_SITE="yes"                                                               # Do you want to remove the PHP-FPM file and reload the service? Use "yes" or "no" 
+PHP_FPM_ROOT_PATH="/etc/php/"                                                       # Root path for the PHP-FPM
+PHP_FPM_VERSION="7.4"                                                               # PHP-FPM version
+FPM_CONFIG_FULL_PATH="/etc/php/$PHP_FPM_VERSION/fpm/pool.d/$PROJECT_DOMAIN.conf"    # Full path for the PHP-FPM project file
+REMOVE_APACHE_SITE="yes"                                                            # Do you want to remove the Apache2 file and reload the service? Use "yes" or "no" 
+APACHE_ROOT_PATH="/etc/apache2/"                                                    # Root path for the Apache2
+APACHE_CONFIG_FILE="$PROJECT_DOMAIN.conf"                                           # Name of the Apache2 project file
+APACHE_CONFIG_FULL_PATH="/etc/apache2/sites-available/$APACHE_CONFIG_FILE"          # Full path for the Apache2 project file (VirtualHost)
+REMOVE_PROJECT_FILES="yes"                                                          # Do you want to remove all the project files? Use "yes" or "no" 
+REMOVE_USERNAME="yes"                                                               # Do you want to remove the local user? Use "yes" or "no" 
+REMOVE_USERNAME_FILES="yes"                                                         # Do you want to remove all the user files (/home/username)? Use "yes" or "no" 
+REMOVE_MYSQL_DATABASE="yes"                                                         # Do you want to remove the MySQL database? Use "yes" or "no" 
+REMOVE_MYSQL_USERNAME="yes"                                                         # Do you want to remove the MySQL username? Use "yes" or "no" 
+MYSQL_DATABASE='ldatabase'                                                          # MySQL database to remove
+MYSQL_USERNAME="luser"                                                              # MySQL database to remove
+MYSQL_ADMIN_USERNAME="homestead"                                                    # Local MySQL admin username
+MYSQL_ADMIN_PASSWORD="secret"                                                       # Local MySQL admin password
+REMOVE_CERTIFICATES="yes"                                                           # Do you want to remove SSL certificates? Use "yes" or "no"
+CERTIFICATES_ROOT_PATH="/etc/letsencrypt/"                                          # Root path for the SSL certificates
+CERT_PEM_FULL_PATH="/etc/letsencrypt/live/$PROJECT_DOMAIN/cert.pem"                 # Full path for the project SSL certificates
+
+TIMESTAMP=`date +%Y-%m-%dT%H:%M:%SZ`
+
+# Screen colors
+# https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+RED='\033[0;31m'
+YELLOW='\033[0;33m'

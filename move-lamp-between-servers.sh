@@ -3,13 +3,6 @@
 # This script move LAMP projects (WordPress/Magento/Laravel,...) between
 # different Linux Servers
 
-#####################################################################
-# Todo
-# Use sshpass to make the remote certificates backup 
-# Make optional the verbose configuration
-# Make an option to delete the remote and the local backups
-#####################################################################
-
 function press_any_key {
   read -n 1 -s -r -p "Press any key to continue"
   echo ""
