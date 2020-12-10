@@ -65,7 +65,7 @@ function make_full_backup {
             echo -e "${GREEN}Backup created ${NC}\n"
         fi 
         echo -e "${GREEN}All the backups created${NC}" 
-        ls -la $PATH_TO_STORE_THE_BACKUP/$TIMESTAMP*
+        ls -la --block-size=M $PATH_TO_STORE_THE_BACKUP$TIMESTAMP*
         echo -e "\n"
     fi
 }
