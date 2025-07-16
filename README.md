@@ -2,9 +2,12 @@
 
 This project contains a set of scripts useful for handling Linux servers. 
 
-Currently there is only 2 scripts, which allows:
-* move a LAMP site between servers. 
-* remove a LAMP site in a server. 
+Currently, the scripts available are:
+* move a LAMP site between servers.
+* remove a LAMP site in a server.
+* install a WordPress site in a LAMP environment.
+* backup WordPress sites, non-WordPress sites, and MySQL databases.
+* update WordPress installations.
 
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
@@ -12,7 +15,7 @@ LAMP site: WordPress, Laravel, Symfony, Magento,...
 
 ### Move LAMP between servers
 
-This script move LAMP site (WordPress, Laravel, Symfony, Magento,...) between 
+This script moves a LAMP site (WordPress, Laravel, Symfony, Magento,...) between 
 different Linux Servers.
 
 Execute this script on the destination machine with root privileges. If you 
@@ -63,7 +66,7 @@ $ sudo move-lamp-between-servers.sh
 
 ### Remove LAMP site
 
-This script remove a LAMP site (WordPress, Laravel, Symfony, Magento,...) in a Linux Server.
+This script removes a LAMP site (WordPress, Laravel, Symfony, Magento,...) in a Linux Server.
 
 This script executes these steps:
 * Make a full backup: files, MySQL, certificates and configuration (PHP-FPM and Apache).
@@ -80,9 +83,69 @@ To execute this script:
 $ cp remove-lamp-site-variables.sh.example remove-lamp-site-variables.sh
 ```
 * Adjust the variables of the **remove-lamp-site-variables.sh** file to your needs.
-* Execute the script as sudo user:
+* Execute the script as sudo user.
 ```
 $ sudo remove-lamp-site.sh
+```
+
+### Install WordPress site
+
+This script installs a WordPress site in a LAMP environment (Debian, Apache2, MySQL, and PHP-FPM).
+
+This script executes these steps:
+* Check if the user is sudo.
+* Check if WP-CLI is installed.
+* Create a new MySQL database and user.
+* Create a new local user.
+* Create the folder for the website.
+* Install WordPress.
+* Update proprietary and permissions.
+* Create the PHP-FPM file and restart the service.
+* Create the Apache virtualhost and enable it.
+* Restart the Apache service.
+* Obtain Let's Encrypt certificates and add SSL to the virtualhost.
+* Replace HTTP with HTTPS.
+
+To execute this script:
+* Adjust the variables in the script to your needs.
+* Execute the script as sudo user.
+```
+$ sudo install-wordpress-site.sh
+```
+
+### Backup WordPress sites
+
+This script performs a backup of WordPress sites, non-WordPress sites, and MySQL databases.
+
+This script executes these steps:
+* Create a backup directory organized by date.
+* Find all WordPress installations and back up their directories.
+* Back up non-WordPress sites.
+* Back up all MySQL databases.
+
+To execute this script:
+* Adjust the variables in the script to your needs.
+* Execute the script as sudo user.
+```
+$ sudo wp-backup.sh
+```
+
+### Update WordPress installations
+
+This script updates WordPress installations.
+
+This script executes these steps:
+* Find all WordPress installations.
+* Optionally back up files and databases.
+* Update WordPress core.
+* Remove inactive plugins and themes.
+* Clean up old backups.
+
+To execute this script:
+* Adjust the variables in the script to your needs.
+* Execute the script as sudo user.
+```
+$ sudo wp-update.sh
 ```
 
 ## Todo
