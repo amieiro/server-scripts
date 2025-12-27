@@ -8,6 +8,7 @@ Currently, the scripts available are:
 * install a WordPress site in a LAMP environment.
 * backup WordPress sites, non-WordPress sites, and MySQL databases.
 * update WordPress installations.
+* check Git status.
 
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
@@ -146,6 +147,24 @@ To execute this script:
 * Execute the script as sudo user.
 ```
 $ sudo wp-update.sh
+```
+
+### Check Git status
+
+This script recursively searches for Git repositories and checks for modified or untracked files. It can output results to the console or send a formatted report to a Slack channel via Webhook.
+
+This script executes these steps:
+* Recursively find Git repositories starting from a specified directory (default: /home).
+* Optionally include or exclude repositories inside "vendor" or "node_modules" folders.
+* For each repository, check for modified and untracked files using git status.
+* Generate a summary report with counts of modified and untracked files per repository.
+* Send the report to a Slack channel via webhook or print it to the console.
+
+To execute this script:
+* Adjust the variables in the script to your needs (e.g., Slack webhook URL, server name, users to ping).
+* Execute the script with optional parameters for directory and flags.
+```
+$ ./check-git-status.sh [DIRECTORY] [include-vendor] [include-node-modules] [no-webhook]
 ```
 
 ## Todo
