@@ -9,6 +9,7 @@ Currently, the scripts available are:
 * backup WordPress sites, non-WordPress sites, and MySQL databases.
 * update WordPress installations.
 * check Git status.
+* check server updates.
 
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
@@ -165,6 +166,25 @@ To execute this script:
 * Execute the script with optional parameters for directory and flags.
 ```
 $ ./check-git-status.sh [DIRECTORY] [include-vendor] [include-node-modules] [no-webhook]
+```
+
+### Check server updates
+
+This script checks for pending OS updates and packages that can be removed on Debian/Ubuntu based systems. It reports findings to Slack via Webhook or prints to the console.
+
+This script executes these steps:
+* Update the package lists.
+* Count the number of upgradable packages.
+* Count the number of packages that can be autoremoved.
+* Check if a system reboot is required.
+* Generate a report with the counts and reboot status.
+* Send the report to a Slack channel via webhook or print it to the console.
+
+To execute this script:
+* Adjust the variables in the script to your needs (e.g., Slack webhook URL, server name, users to ping).
+* Execute the script as sudo user with optional flag to disable webhook.
+```
+$ sudo ./check-server-updates.sh [no-webhook]
 ```
 
 ## Todo
