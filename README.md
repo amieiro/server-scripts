@@ -10,6 +10,7 @@ Currently, the scripts available are:
 * update WordPress installations.
 * check Git status.
 * check server updates.
+* check app vulnerabilities.
 
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
@@ -185,6 +186,26 @@ To execute this script:
 * Execute the script as sudo user with optional flag to disable webhook.
 ```
 $ sudo ./check-server-updates.sh [no-webhook]
+```
+
+### Check app vulnerabilities
+
+This script scans for vulnerabilities in PHP (Composer) and JavaScript (NPM/Yarn) dependencies. It reports findings to a webhook or prints to the console.
+
+This script executes these steps:
+* Recursively find projects with composer.json or package.json starting from a specified directory (default: /home).
+* Optionally include or exclude projects inside "vendor" or "node_modules" folders.
+* For each project, check for the presence and validity of lock files.
+* Run security audits using composer audit and npm audit.
+* Count vulnerabilities by severity levels (critical, high, medium/moderate, low).
+* Generate a summary report with counts and details per project.
+* Send the report to a webhook or print it to the console.
+
+To execute this script:
+* Adjust the variables in the script to your needs (e.g., Webhook URL, server name, users to ping).
+* Execute the script as sudo user with optional parameters for directory and flags.
+```
+$ sudo ./check-app-vulnerabilities.sh [DIRECTORY] [include-vendor] [include-node-modules] [show-missing-lock-file] [no-webhook]
 ```
 
 ## Todo
