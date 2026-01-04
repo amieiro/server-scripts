@@ -12,6 +12,15 @@ Currently, the scripts available are:
 * check server updates.
 * check app vulnerabilities.
 
+Before using any of the "check" scripts (`check-git-status.sh`, `check-server-updates.sh`, `check-app-vulnerabilities.sh`) you must create the configuration file from the example and edit it to match your environment:
+
+```
+cp config.sh.example config.sh
+# Edit config.sh and set your actual values (Webhook URL, server name, users to ping, etc.)
+```
+
+The `config.sh` file is ignored by git (see `.gitignore`) and should not be committed because it may contain sensitive information.
+
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
 ## Scripts
