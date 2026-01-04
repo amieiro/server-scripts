@@ -29,12 +29,6 @@ fi
 
 source "$CONFIG_FILE"
 
-# --- Configuration Constants ---
-DEFAULT_SEARCH_DIR="$CHECK_APP_VULNERABILITIES_DEFAULT_SEARCH_DIR"
-SERVER_NAME="$CHECK_APP_VULNERABILITIES_SERVER_NAME"
-SLACK_WEBHOOK_URL="$CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL"
-PING_USERS="$CHECK_APP_VULNERABILITIES_PING_USERS"
-
 # --- Initialization & Tool Check ---
 # Ensure script runs as root
 if [[ $EUID -ne 0 ]]; then
@@ -53,7 +47,7 @@ for tool in composer npm jq; do
     fi
 done
 
-SEARCH_DIR="$DEFAULT_SEARCH_DIR"
+SEARCH_DIR="$CHECK_APP_VULNERABILITIES_DEFAULT_SEARCH_DIR"
 INCLUDE_VENDOR=false
 INCLUDE_NODE_MODULES=false
 SHOW_MISSING_LOCK=false
@@ -174,7 +168,7 @@ TOTAL_LOW=$((C_LOW + N_LOW))
 
 if [ $((TOTAL_CRITICAL + TOTAL_HIGH)) -gt 0 ]; then
     EMOJI="🚨"; COLOR="#E01E5A"
-    MENTIONS=""; for user in $PING_USERS; do MENTIONS+="<@$user> "; done
+    MENTIONS=""; for user in $CHECK_APP_VULNERABILITIES_PING_USERS; do MENTIONS+="<@$user> "; done
 elif [ $((TOTAL_MEDIUM_MOD + TOTAL_LOW + C_CRITICAL + C_HIGH + N_CRITICAL + N_HIGH)) -gt 0 ] || [ -n "$REPORT_LIST" ]; then
     # Use warning emoji if there are medium/low issues OR if REPORT_LIST has items (like missing lock files)
     EMOJI="⚠️"; COLOR="#E8A317"; MENTIONS=""
@@ -188,7 +182,7 @@ SUMMARY="*Composer:* crit:$C_CRITICAL, high:$C_HIGH, med:$C_MEDIUM, low:$C_LOW\n
 if [ "$SEND_WEBHOOK" = true ]; then
     PAYLOAD=$(cat <<EOF
 {
-  "text": "$EMOJI *Security Audit - $SERVER_NAME*",
+  "text": "$EMOJI *Security Audit - $CHECK_APP_VULNERABILITIES_SERVER_NAME*",
   "attachments": [{
       "color": "$COLOR",
       "title": "Vulnerability Summary",
@@ -199,10 +193,10 @@ if [ "$SEND_WEBHOOK" = true ]; then
 }
 EOF
 )
-    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL" > /dev/null
+    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL" > /dev/null
     echo "Report sent to Slack."
 else
-    echo -e "--- SECURITY AUDIT ($SERVER_NAME) ---"
+    echo -e "--- SECURITY AUDIT ($CHECK_APP_VULNERABILITIES_SERVER_NAME) ---"
     echo -e "Summary:\n$SUMMARY"
     echo -e "\nDetailed List:$REPORT_LIST"
 fi

@@ -30,11 +30,6 @@ fi
 
 source "$CONFIG_FILE"
 
-# --- Configuration Constants ---
-SERVER_NAME="$CHECK_SERVER_UPDATES_SERVER_NAME"
-SLACK_WEBHOOK_URL="$CHECK_SERVER_UPDATES_SLACK_WEBHOOK_URL"
-PING_USERS="$CHECK_SERVER_UPDATES_PING_USERS"
-
 # --- Initialization ---
 # Ensure the script is run as root
 if [[ $EUID -ne 0 ]]; then
@@ -73,7 +68,7 @@ fi
 # --- Slack Formatting ---
 # Build user mentions
 MENTIONS=""
-for user in $PING_USERS; do
+for user in $CHECK_SERVER_UPDATES_PING_USERS; do
     MENTIONS+="<@$user> "
 done
 
@@ -104,7 +99,7 @@ if [ "$SEND_WEBHOOK" = true ]; then
     # Create JSON payload
     PAYLOAD=$(cat <<EOF
 {
-  "text": "$EMOJI *Server Update Report - $SERVER_NAME*",
+  "text": "$EMOJI *Server Update Report - $CHECK_SERVER_UPDATES_SERVER_NAME*",
   "attachments": [
     {
       "color": "$COLOR",
@@ -117,11 +112,11 @@ if [ "$SEND_WEBHOOK" = true ]; then
 EOF
 )
     # Send to Slack
-    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL" > /dev/null
+    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$CHECK_SERVER_UPDATES_SLACK_WEBHOOK_URL" > /dev/null
     echo "Update report sent to Slack."
 else
     # Output to console
-    echo "--- CHECK SERVER UPDATES ($SERVER_NAME) ---"
+    echo "--- CHECK SERVER UPDATES ($CHECK_SERVER_UPDATES_SERVER_NAME) ---"
     echo -e "Status: $EMOJI $TITLE"
     echo -e "Details:\n$FINAL_TEXT"
     echo "-------------------------------------------"

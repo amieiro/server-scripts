@@ -34,14 +34,8 @@ fi
 
 source "$CONFIG_FILE"
 
-# --- Configuration Constants ---
-DEFAULT_SEARCH_DIR="$CHECK_GIT_STATUS_DEFAULT_SEARCH_DIR"
-SERVER_NAME="$CHECK_GIT_STATUS_SERVER_NAME"
-SLACK_WEBHOOK_URL="$CHECK_GIT_STATUS_SLACK_WEBHOOK_URL"
-PING_USERS="$CHECK_GIT_STATUS_PING_USERS"
-
 # --- Initialization ---
-SEARCH_DIR="$DEFAULT_SEARCH_DIR"
+SEARCH_DIR="$CHECK_GIT_STATUS_DEFAULT_SEARCH_DIR"
 INCLUDE_VENDOR=false
 INCLUDE_NODE_MODULES=false
 SEND_WEBHOOK=true
@@ -108,7 +102,7 @@ done < <(find "$SEARCH_DIR" -name ".git" -type d -prune)
 # --- Slack Formatting ---
 # Build user mentions string
 MENTIONS=""
-for user in $PING_USERS; do
+for user in $CHECK_GIT_STATUS_PING_USERS; do
     MENTIONS+="<@$user> "
 done
 
@@ -130,7 +124,7 @@ if [ "$SEND_WEBHOOK" = true ]; then
     # Prepare JSON payload for Slack API
     PAYLOAD=$(cat <<EOF
 {
-  "text": "$EMOJI *Git Status Report - Server: $SERVER_NAME*",
+  "text": "$EMOJI *Git Status Report - Server: $CHECK_GIT_STATUS_SERVER_NAME*",
   "attachments": [
     {
       "color": "$COLOR",
@@ -143,11 +137,11 @@ if [ "$SEND_WEBHOOK" = true ]; then
 EOF
 )
     # Execute the curl request
-    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL" > /dev/null
+    curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$CHECK_GIT_STATUS_SLACK_WEBHOOK_URL" > /dev/null
     echo "Report sent to Slack."
 else
     # Output to stdout if webhook is disabled
-    echo "--- GIT CHECK REPORT ($SERVER_NAME) ---"
+    echo "--- GIT CHECK REPORT ($CHECK_GIT_STATUS_SERVER_NAME) ---"
     echo -e "Status: $EMOJI $STATUS_MSG"
     echo -e "Details: $FINAL_TEXT"
     echo "---------------------------------------"
