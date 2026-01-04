@@ -1,0 +1,61 @@
+#!/bin/bash
+
+################################################################################
+# COMMON CONFIGURATION FILE FOR SERVER SCRIPTS - EXAMPLE TEMPLATE
+#
+# This file contains shared configuration constants used across multiple
+# server management scripts. Copy this file to config.sh and customize
+# the values according to your environment.
+#
+# USAGE:
+#   cp config.sh.example config.sh
+#   # Edit config.sh with your actual values
+#
+# IMPORTANT: The actual config.sh file should NOT be committed to version
+# control as it contains sensitive information (Slack webhook URLs, etc.)
+################################################################################
+
+# =============================================================================
+# CHECK APP VULNERABILITIES CONFIGURATION
+# =============================================================================
+
+# Default directory to scan if none is provided
+CHECK_APP_VULNERABILITIES_DEFAULT_SEARCH_DIR="/home"
+
+# Server identification
+CHECK_APP_VULNERABILITIES_SERVER_NAME="My server name"
+
+# Slack Webhook URL
+CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# List of Slack usernames to mention (without @)
+CHECK_APP_VULNERABILITIES_PING_USERS="user1 user2"
+
+# =============================================================================
+# CHECK GIT STATUS CONFIGURATION
+# =============================================================================
+
+# Default directory to scan if none is provided
+CHECK_GIT_STATUS_DEFAULT_SEARCH_DIR="/home"
+
+# Server identification (references the first definition)
+CHECK_GIT_STATUS_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
+
+# Slack Webhook URL (references the first definition)
+CHECK_GIT_STATUS_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL}"
+
+# List of Slack usernames to mention (references the first definition)
+CHECK_GIT_STATUS_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
+
+# =============================================================================
+# CHECK SERVER UPDATES CONFIGURATION
+# =============================================================================
+
+# Server identification (references the first definition)
+CHECK_SERVER_UPDATES_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
+
+# Slack Webhook URL (references the first definition)
+CHECK_SERVER_UPDATES_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL}"
+
+# List of Slack usernames to mention (references the first definition)
+CHECK_SERVER_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"

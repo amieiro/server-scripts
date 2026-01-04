@@ -1,3 +1,4 @@
 move-lamp-between-servers-variables.sh
 remove-lamp-site-variables.sh
+config.sh
 .vscode

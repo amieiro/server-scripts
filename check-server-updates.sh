@@ -18,13 +18,22 @@
 #   - PING_USERS: "user1 user2"
 ################################################################################
 
+# --- Load Configuration ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="${SCRIPT_DIR}/config.sh"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Configuration file not found at $CONFIG_FILE"
+    echo "Please copy config.sh.example to config.sh and configure it."
+    exit 1
+fi
+
+source "$CONFIG_FILE"
+
 # --- Configuration Constants ---
-# Server identification
-SERVER_NAME="My server name"
-# Slack Webhook URL
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-# List of Slack usernames to mention (without @) if updates are found
-PING_USERS="user1 user2"
+SERVER_NAME="$CHECK_SERVER_UPDATES_SERVER_NAME"
+SLACK_WEBHOOK_URL="$CHECK_SERVER_UPDATES_SLACK_WEBHOOK_URL"
+PING_USERS="$CHECK_SERVER_UPDATES_PING_USERS"
 
 # --- Initialization ---
 # Ensure the script is run as root

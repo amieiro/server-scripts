@@ -22,15 +22,23 @@
 #   - SEND_WEBHOOK: true
 ################################################################################
 
+# --- Load Configuration ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="${SCRIPT_DIR}/config.sh"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Configuration file not found at $CONFIG_FILE"
+    echo "Please copy config.sh.example to config.sh and configure it."
+    exit 1
+fi
+
+source "$CONFIG_FILE"
+
 # --- Configuration Constants ---
-# Default directory to scan if none is provided
-DEFAULT_SEARCH_DIR="/home"
-# Server identification
-SERVER_NAME="My server name"
-# Slack Webhook URL
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-# List of Slack usernames to mention (without @)
-PING_USERS="user1 user2"
+DEFAULT_SEARCH_DIR="$CHECK_GIT_STATUS_DEFAULT_SEARCH_DIR"
+SERVER_NAME="$CHECK_GIT_STATUS_SERVER_NAME"
+SLACK_WEBHOOK_URL="$CHECK_GIT_STATUS_SLACK_WEBHOOK_URL"
+PING_USERS="$CHECK_GIT_STATUS_PING_USERS"
 
 # --- Initialization ---
 SEARCH_DIR="$DEFAULT_SEARCH_DIR"
