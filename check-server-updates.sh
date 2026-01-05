@@ -73,20 +73,41 @@ for user in $CHECK_SERVER_UPDATES_PING_USERS; do
 done
 
 # Determine status and visuals
-if [ "$UPDATE_COUNT" -gt 0 ] || [ "$REMOVE_COUNT" -gt 0 ] || [ "$REBOOT_REQUIRED" = true ]; then
+# Logic:
+# - If there are pending updates or reboot required -> error (red)
+# - If there are only obsolete packages (REMOVE_COUNT>0 and UPDATE_COUNT==0 and not REBOOT_REQUIRED):
+#     - If CHECK_SERVER_UPDATES_TREAT_OBSOLETE_ONLY_AS_ERROR == "true" -> treat as error (red)
+#     - Else -> treat as OK (green)
+# - Otherwise -> OK (green)
+if [ "$UPDATE_COUNT" -gt 0 ] || [ "$REBOOT_REQUIRED" = true ]; then
     EMOJI="🚨"
     COLOR="#E01E5A" # Slack Red
     TITLE="Action Required: System updates available"
-    
-    # Detail string construction
+
     DETAILS="• *Pending Updates:* $UPDATE_COUNT packages\n"
     DETAILS+="• *Obsolete Packages:* $REMOVE_COUNT can be removed\n"
-    
     if [ "$REBOOT_REQUIRED" = true ]; then
         DETAILS+="• *Reboot:* ⚠️ System reboot is REQUIRED\n"
     fi
-    
+
     FINAL_TEXT="$DETAILS\nAttention: $MENTIONS"
+elif [ "$REMOVE_COUNT" -gt 0 ]; then
+    # If flagged to treat obsolete-only as error -> red, otherwise treat as OK (green)
+    if [ "${CHECK_SERVER_UPDATES_TREAT_OBSOLETE_ONLY_AS_ERROR:-false}" = "true" ]; then
+        EMOJI="🚨"
+        COLOR="#E01E5A"
+        TITLE="Action Required: Obsolete packages detected"
+        DETAILS="• *Pending Updates:* $UPDATE_COUNT packages\n"
+        DETAILS+="• *Obsolete Packages:* $REMOVE_COUNT can be removed\n"
+        FINAL_TEXT="$DETAILS\nAttention: $MENTIONS"
+    else
+        EMOJI="✅"
+        COLOR="#36a64f" # Slack Green
+        TITLE="System is up to date"
+        DETAILS="• *Pending Updates:* $UPDATE_COUNT packages\n"
+        DETAILS+="• *Obsolete Packages:* $REMOVE_COUNT can be removed\n"
+        FINAL_TEXT="$DETAILS\nAttention: $MENTIONS"
+    fi
 else
     EMOJI="✅"
     COLOR="#36a64f" # Slack Green

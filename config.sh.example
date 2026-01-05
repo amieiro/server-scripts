@@ -59,3 +59,8 @@ CHECK_SERVER_UPDATES_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOO
 
 # List of Slack usernames to mention (references the first definition)
 CHECK_SERVER_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
+
+# Treat situation "no updates but obsolete packages" as an error?
+# - false (default): do NOT treat it as an error (will be a warning)
+# - true: treat it as an error (alert/failed state)
+CHECK_SERVER_UPDATES_TREAT_OBSOLETE_ONLY_AS_ERROR="false"
