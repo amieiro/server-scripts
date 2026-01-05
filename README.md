@@ -21,6 +21,19 @@ cp config.sh.example config.sh
 
 The `config.sh` file is ignored by git (see `.gitignore`) and should not be committed because it may contain sensitive information.
 
+## Auto-update Feature
+
+All scripts in this repository support automatic updates from the git repository. By default, each script will execute `git pull` at startup to ensure it's running the latest version. This behavior can be controlled with the `AUTO_UPDATE_SCRIPTS` variable in `config.sh`:
+
+- `AUTO_UPDATE_SCRIPTS="true"` (default): Scripts will automatically update before execution
+- `AUTO_UPDATE_SCRIPTS="false"`: Scripts will not auto-update
+
+The auto-update process:
+- Runs silently at the beginning of each script execution
+- Never interrupts script execution (errors are ignored)
+- The updated code will be used in the next execution (current execution continues with the loaded version)
+- Works for all scripts: check-*, install-wordpress-site.sh, wp-*.sh, move-lamp-between-servers.sh, and remove-lamp-site.sh
+
 LAMP site: WordPress, Laravel, Symfony, Magento,...
 
 ## Scripts

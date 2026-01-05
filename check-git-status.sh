@@ -22,8 +22,11 @@
 #   - SEND_WEBHOOK: true
 ################################################################################
 
-# --- Load Configuration ---
+# --- Load Common Functions (includes auto-update) ---
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/common-functions.sh"
+
+# --- Load Configuration ---
 CONFIG_FILE="${SCRIPT_DIR}/config.sh"
 
 if [ ! -f "$CONFIG_FILE" ]; then

@@ -16,6 +16,15 @@
 ################################################################################
 
 # =============================================================================
+# GLOBAL CONFIGURATION
+# =============================================================================
+
+# Automatically update scripts from git repository before execution
+# - true (default): scripts will run 'git pull' at startup
+# - false: scripts will not auto-update
+AUTO_UPDATE_SCRIPTS="true"
+
+# =============================================================================
 # CHECK APP VULNERABILITIES CONFIGURATION
 # =============================================================================
 

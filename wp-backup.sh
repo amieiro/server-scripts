@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load Common Functions (includes auto-update) ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/common-functions.sh"
+
 # This script performs a backup of WordPress sites, non-WordPress sites, and MySQL databases.
 # It organizes backups into a directory structure based on the current date.
 

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --- Load Common Functions (includes auto-update) ---
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "${SCRIPT_DIR}/common-functions.sh"
+
 # This script install a WordPress in a LAMP environment: Debian, Apache2, 
 # MySQL and PHP-FPM
 
