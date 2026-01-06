@@ -11,8 +11,9 @@ Currently, the scripts available are:
 * check Git status.
 * check server updates.
 * check app vulnerabilities.
+* check resource usage (disk space monitoring with alerts).
 
-Before using any of the "check" scripts (`check-git-status.sh`, `check-server-updates.sh`, `check-app-vulnerabilities.sh`) you must create the configuration file from the example and edit it to match your environment:
+Before using any of the "check" scripts (`check-git-status.sh`, `check-server-updates.sh`, `check-app-vulnerabilities.sh`, `check-resource-usage.sh`) you must create the configuration file from the example and edit it to match your environment:
 
 ```
 cp config.sh.example config.sh
@@ -228,6 +229,48 @@ To execute this script:
 * Execute the script as sudo user with optional parameters for directory and flags.
 ```
 $ sudo ./check-app-vulnerabilities.sh [DIRECTORY] [include-vendor] [include-node-modules] [show-missing-lock-file] [no-webhook]
+```
+
+### Check resource usage
+
+This script monitors system resource usage and sends alerts when thresholds are exceeded. Currently monitors disk space usage with plans to expand to CPU, memory, network, and other metrics.
+
+This script executes these steps:
+* Check disk space usage on configured partitions (default: / and /home).
+* Compare usage against WARNING (default: 80%) and CRITICAL (default: 90%) thresholds.
+* Send webhook alerts for partitions exceeding thresholds.
+* Implement cooldown period (default: 4 hours) to prevent alert fatigue.
+* Log all checks and alerts to /var/log/check-resource-usage.log.
+* Skip alerts during cooldown period for the same partition and severity level.
+
+Configuration in `config.sh`:
+* `CHECK_RESOURCE_USAGE_DISK_WARNING_THRESHOLD`: Warning threshold percentage (default: 80)
+* `CHECK_RESOURCE_USAGE_DISK_CRITICAL_THRESHOLD`: Critical threshold percentage (default: 90)
+* `CHECK_RESOURCE_USAGE_PARTITIONS`: Space-separated list of partitions to monitor (default: "/ /home")
+* `CHECK_RESOURCE_USAGE_ALERT_COOLDOWN_MINUTES`: Minutes between alerts for same issue (default: 240)
+
+Future metrics (documented in script comments):
+* CPU usage monitoring
+* Memory (RAM) usage monitoring
+* Disk I/O monitoring
+* Network usage monitoring
+* Load average monitoring
+* Process count monitoring
+* Swap usage monitoring
+* System uptime tracking
+* Temperature monitoring
+
+To execute this script:
+* Configure thresholds and partitions in config.sh.
+* Execute the script as sudo user with optional flag to disable webhook.
+* Recommended: Schedule with cron for periodic monitoring (e.g., every 15 minutes).
+```
+$ sudo ./check-resource-usage.sh [no-webhook]
+```
+
+Example cron job for monitoring every 15 minutes:
+```
+*/15 * * * * /path/to/check-resource-usage.sh
 ```
 
 ## Todo

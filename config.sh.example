@@ -73,3 +73,33 @@ CHECK_SERVER_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
 # - false (default): do NOT treat it as an error (will be a warning)
 # - true: treat it as an error (alert/failed state)
 CHECK_SERVER_UPDATES_TREAT_OBSOLETE_ONLY_AS_ERROR="false"
+
+# =============================================================================
+# CHECK RESOURCE USAGE CONFIGURATION
+# =============================================================================
+
+# Server identification (references the first definition)
+CHECK_RESOURCE_USAGE_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
+
+# Slack Webhook URL (references the first definition)
+CHECK_RESOURCE_USAGE_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL}"
+
+# List of Slack usernames to mention (references the first definition)
+CHECK_RESOURCE_USAGE_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
+
+# Disk space thresholds (percentage)
+CHECK_RESOURCE_USAGE_DISK_WARNING_THRESHOLD="80"
+CHECK_RESOURCE_USAGE_DISK_CRITICAL_THRESHOLD="90"
+
+# Partitions to monitor (space-separated list)
+CHECK_RESOURCE_USAGE_PARTITIONS="/ /home"
+
+# Cooldown period between alerts for same partition and severity level (in minutes)
+CHECK_RESOURCE_USAGE_ALERT_COOLDOWN_MINUTES="240"
+
+# TODO: Future metrics to be configured
+# CHECK_RESOURCE_USAGE_CPU_THRESHOLD=""
+# CHECK_RESOURCE_USAGE_MEMORY_THRESHOLD=""
+# CHECK_RESOURCE_USAGE_SWAP_THRESHOLD=""
+# CHECK_RESOURCE_USAGE_LOAD_AVERAGE_THRESHOLD=""
+# CHECK_RESOURCE_USAGE_NETWORK_THRESHOLD=""
