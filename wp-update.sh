@@ -4,21 +4,32 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/common-functions.sh"
 
+# --- Load Configuration ---
+CONFIG_FILE="${SCRIPT_DIR}/config.sh"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: Configuration file not found at $CONFIG_FILE"
+    echo "Please copy config.sh.example to config.sh and configure it."
+    exit 1
+fi
+
+source "$CONFIG_FILE"
+
 # ----------------------------
 # Configuration Constants
 # ----------------------------
 
-WP_ROOT="/var/www" # Root directory containing all WordPress installations
-WP_CLI="/usr/local/bin/wp" # Path to WP-CLI executable
-LOG_FOLDER="/var/log/wp-update" # Log file directory
+WP_ROOT="$WP_UPDATE_WP_ROOT" # Root directory containing all WordPress installations
+WP_CLI="$WP_UPDATE_WP_CLI" # Path to WP-CLI executable
+LOG_FOLDER="$WP_UPDATE_LOG_FOLDER" # Log file directory
 LOG_FILE="${LOG_FOLDER}/wp-update-$(date +%Y-%m-%d).log" # Daily log file path
-BACKUP_DIR="/var/backups" # Root backup directory (daily subfolders)
-BACKUP_RETENTION_DAYS=7 # Days to retain backups
+BACKUP_DIR="$WP_UPDATE_BACKUP_DIR" # Root backup directory (daily subfolders)
+BACKUP_RETENTION_DAYS="$WP_UPDATE_BACKUP_RETENTION_DAYS" # Days to retain backups
 
 # Feature Flags
-ENABLE_BACKUPS=false # Perform database and file backups (default: false)
-REMOVE_INACTIVE_PLUGINS=false # Remove inactive plugins (default: false)
-REMOVE_INACTIVE_THEMES=true # Remove inactive themes (default: true)
+ENABLE_BACKUPS="$WP_UPDATE_ENABLE_BACKUPS" # Perform database and file backups
+REMOVE_INACTIVE_PLUGINS="$WP_UPDATE_REMOVE_INACTIVE_PLUGINS" # Remove inactive plugins
+REMOVE_INACTIVE_THEMES="$WP_UPDATE_REMOVE_INACTIVE_THEMES" # Remove inactive themes
 
 # ----------------------------
 # Initialization

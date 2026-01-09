@@ -103,3 +103,32 @@ CHECK_RESOURCE_USAGE_ALERT_COOLDOWN_MINUTES="240"
 # CHECK_RESOURCE_USAGE_SWAP_THRESHOLD=""
 # CHECK_RESOURCE_USAGE_LOAD_AVERAGE_THRESHOLD=""
 # CHECK_RESOURCE_USAGE_NETWORK_THRESHOLD=""
+
+# =============================================================================
+# WP UPDATE CONFIGURATION
+# =============================================================================
+
+# Root directory containing all WordPress installations
+WP_UPDATE_WP_ROOT="/var/www"
+
+# Path to WP-CLI executable
+WP_UPDATE_WP_CLI="/usr/local/bin/wp"
+
+# Log file directory
+WP_UPDATE_LOG_FOLDER="/var/log/wp-update"
+
+# Root backup directory (daily subfolders will be created)
+WP_UPDATE_BACKUP_DIR="/var/backups"
+
+# Days to retain backups
+WP_UPDATE_BACKUP_RETENTION_DAYS="7"
+
+# Feature Flags
+# Perform database and file backups
+WP_UPDATE_ENABLE_BACKUPS="false"
+
+# Remove inactive plugins
+WP_UPDATE_REMOVE_INACTIVE_PLUGINS="false"
+
+# Remove inactive themes
+WP_UPDATE_REMOVE_INACTIVE_THEMES="true"
