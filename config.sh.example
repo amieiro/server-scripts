@@ -132,3 +132,19 @@ WP_UPDATE_REMOVE_INACTIVE_PLUGINS="false"
 
 # Remove inactive themes
 WP_UPDATE_REMOVE_INACTIVE_THEMES="true"
+
+# =============================================================================
+# CHECK WORDPRESS UPDATES CONFIGURATION
+# =============================================================================
+
+# Root directory containing all WordPress installations (references WP_UPDATE)
+CHECK_WORDPRESS_UPDATES_WP_ROOT="${WP_UPDATE_WP_ROOT}"
+
+# Server identification (references the first definition)
+CHECK_WORDPRESS_UPDATES_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
+
+# Slack Webhook URL (references the first definition)
+CHECK_WORDPRESS_UPDATES_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL}"
+
+# List of Slack usernames to mention (references the first definition)
+CHECK_WORDPRESS_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"

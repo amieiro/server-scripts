@@ -12,8 +12,9 @@ Currently, the scripts available are:
 * check server updates.
 * check app vulnerabilities.
 * check resource usage (disk space monitoring with alerts).
+* check WordPress updates (pending updates for core, plugins, themes, translations).
 
-Before using any of the "check" scripts (`check-git-status.sh`, `check-server-updates.sh`, `check-app-vulnerabilities.sh`, `check-resource-usage.sh`) you must create the configuration file from the example and edit it to match your environment:
+Before using any of the "check" scripts (`check-git-status.sh`, `check-server-updates.sh`, `check-app-vulnerabilities.sh`, `check-resource-usage.sh`, `check-wordpress-updates.sh`) you must create the configuration file from the example and edit it to match your environment:
 
 ```
 cp config.sh.example config.sh
@@ -270,7 +271,47 @@ $ sudo ./check-resource-usage.sh [no-webhook]
 
 Example cron job for monitoring every 15 minutes:
 ```
-*/15 * * * * /path/to/check-resource-usage.sh
+*/15 * * * * /path/to/check-resource-usage.sh > /dev/null 2>&1
+```
+
+### Check WordPress updates
+
+This script checks WordPress installations for pending updates and sends alerts with severity levels. It reports on core, plugin, theme, and translation updates.
+
+This script executes these steps:
+* Find all WordPress installations in the configured root directory (searches for wp-includes directories).
+* Check for updates using WP-CLI for each installation: core, plugins, themes, and translations.
+* Determine severity level based on update type.
+* Generate a consolidated report with all sites that have pending updates.
+* Send webhook notification or display results in console.
+
+Severity levels:
+* **CRITICAL (🚨 red)**: Core, plugin, or theme updates available - requires immediate attention
+* **INFO (✅ green)**: Only translation updates available or no updates pending
+
+Report details include:
+* Site URL (if available) and installation path
+* Number of updates per type (core, plugins, themes, translations)
+* Specific plugin/theme names with current and available versions
+* Overall summary: total sites, critical sites, info sites, up-to-date sites
+
+Configuration in `config.sh`:
+* `CHECK_WORDPRESS_UPDATES_WP_ROOT`: Root directory to scan for WordPress installations (references `WP_UPDATE_WP_ROOT`)
+* `CHECK_WORDPRESS_UPDATES_SLACK_WEBHOOK_URL`: Webhook URL for notifications
+* `CHECK_WORDPRESS_UPDATES_PING_USERS`: Users to mention in critical alerts
+
+To execute this script:
+* Configure WordPress root directory in config.sh.
+* Ensure WP-CLI is installed and accessible.
+* Execute the script as sudo user with optional flag to disable webhook.
+* Recommended: Schedule with cron for periodic monitoring (e.g., daily).
+```
+$ sudo ./check-wordpress-updates.sh [no-webhook]
+```
+
+Example cron job for daily monitoring at 9 AM:
+```
+0 9 * * * /path/to/check-wordpress-updates.sh > /dev/null 2>&1
 ```
 
 ## Todo
