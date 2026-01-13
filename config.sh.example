@@ -148,3 +148,33 @@ CHECK_WORDPRESS_UPDATES_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEB
 
 # List of Slack usernames to mention (references the first definition)
 CHECK_WORDPRESS_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
+
+# =============================================================================
+# CHECK MALWARE CONFIGURATION
+# =============================================================================
+
+# Default directory to scan if none is provided
+CHECK_MALWARE_DEFAULT_SEARCH_DIR="/home"
+
+# Server identification (references the first definition)
+CHECK_MALWARE_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
+
+# Slack Webhook URL (references the first definition)
+CHECK_MALWARE_SLACK_WEBHOOK_URL="${CHECK_APP_VULNERABILITIES_SLACK_WEBHOOK_URL}"
+
+# List of Slack usernames to mention (references the first definition)
+CHECK_MALWARE_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
+
+# Directories to exclude from scanning (space-separated)
+CHECK_MALWARE_EXCLUDE_DIRS="vendor node_modules .git cache tmp temp logs log backup backups .npm .composer dist build __pycache__"
+
+# Maximum file size to scan (files larger than this will be skipped)
+CHECK_MALWARE_MAX_FILE_SIZE="10M"
+
+# Scan only recently modified files?
+# - false (default): scan all files
+# - true: only scan files modified in the last N days
+CHECK_MALWARE_SCAN_RECENT_ONLY="false"
+
+# Number of days to consider a file "recent" (used when SCAN_RECENT_ONLY=true)
+CHECK_MALWARE_RECENT_DAYS="7"

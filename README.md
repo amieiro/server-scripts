@@ -314,7 +314,97 @@ Example cron job for daily monitoring at 9 AM:
 0 9 * * * /path/to/check-wordpress-updates.sh > /dev/null 2>&1
 ```
 
+### Check malware patterns
+
+This script scans PHP and JavaScript files for malicious code patterns commonly found in web application hacks (WordPress, Magento, Laravel, Drupal, Joomla). It detects suspicious patterns like eval(), base64_decode(), command execution, obfuscated code, and files with suspicious names or locations.
+
+This script executes these steps:
+* Scan specified directory (or default from config) for PHP and JavaScript files.
+* Exclude common directories: vendor/, node_modules/, .git/, cache/, tmp/ (configurable).
+* Use parallel processing (xargs -P4) for improved performance on large codebases.
+* Check files for malicious patterns categorized by severity level.
+* Check filenames for suspicious patterns (hex hashes, double extensions, hidden files).
+* Apply WordPress core whitelist for legitimate base64_decode/eval usage (unless --strict mode).
+* Generate detailed report with file paths, patterns matched, and line numbers.
+* Send webhook notification or display results in console.
+
+Severity levels:
+* **CRITICAL (🚨 red)**: eval+encoding, known shells (c99shell, r57shell), command execution with encoding, backdoor patterns - requires immediate investigation
+* **HIGH (⚠️ yellow)**: Multiple encoding layers, obfuscation (chr(), hex), variable functions, suspicious file operations - strong indicators of malware
+* **MEDIUM (📋 blue)**: Single encoding, dynamic includes, unsafe serialization - potentially legitimate in frameworks but requires review
+* **LOW (ℹ️ grey)**: Risky practices like chmod 777, error_reporting(0), set_time_limit(0) - poor security but often legitimate
+
+Detection patterns include:
+* **PHP**: eval/assert+base64_decode/gzinflate/str_rot13, preg_replace /e, variable variables (${$...}), $_REQUEST/$_POST/$_GET as functions, shell_exec/exec/system/passthru with encoding, proc_open, file operations with encoding, known shell signatures
+* **JavaScript**: eval+atob, eval+unescape, String.fromCharCode+eval, crypto miners (coinhive, crypto-loot), malicious redirects, data: URI injections
+* **Filenames**: hex hash names (a1b2c3d4.php), double extensions (shell.php.txt), hidden files (.config.php), common malware names (backup123.php, test.php), PHP in upload/media/assets directories
+
+WordPress whitelist:
+* Legitimate WordPress core files in wp-includes/ and wp-admin/ often use base64_decode and dynamic includes
+* MEDIUM and LOW patterns are whitelisted in these directories by default
+* CRITICAL and HIGH patterns are always reported (even in core)
+* Use --strict flag to disable whitelist and report all patterns
+
+Configuration in `config.sh`:
+* `CHECK_MALWARE_DEFAULT_SEARCH_DIR`: Default directory to scan (default: "/home")
+* `CHECK_MALWARE_SLACK_WEBHOOK_URL`: Webhook URL for notifications
+* `CHECK_MALWARE_PING_USERS`: Users to mention in critical alerts
+* `CHECK_MALWARE_EXCLUDE_DIRS`: Directories to exclude from scan (space-separated list)
+* `CHECK_MALWARE_MAX_FILE_SIZE`: Maximum file size to scan (default: "10M")
+* `CHECK_MALWARE_SCAN_RECENT_ONLY`: Only scan recently modified files (default: "false")
+* `CHECK_MALWARE_RECENT_DAYS`: Number of days to consider "recent" (default: "7")
+
+To execute this script:
+* Configure scan directory and exclusions in config.sh.
+* Execute the script as sudo user with optional parameters.
+* Recommended: Schedule with cron for periodic monitoring (e.g., weekly).
+```
+$ sudo ./check-malware.sh [DIRECTORY] [OPTIONS]
+```
+
+Available options:
+* `include-vendor`: Include vendor/ directories in scan
+* `include-node-modules`: Include node_modules/ directories in scan
+* `quick-scan`: Only scan for CRITICAL patterns (faster)
+* `recent-only`: Only scan files modified in last N days (from config)
+* `--strict`: Disable WordPress core whitelist (more false positives but thorough)
+* `no-webhook`: Display output in terminal only, don't send to Slack
+
+Examples:
+```
+# Basic scan of default directory
+$ sudo ./check-malware.sh no-webhook
+
+# Scan specific directory
+$ sudo ./check-malware.sh /var/www no-webhook
+
+# Quick scan including vendor directories
+$ sudo ./check-malware.sh include-vendor quick-scan no-webhook
+
+# Strict mode with recent files only
+$ sudo ./check-malware.sh /home/sites --strict recent-only no-webhook
+```
+
+Example cron job for weekly full scan on Sunday at 2 AM:
+```
+0 2 * * 0 /path/to/check-malware.sh > /dev/null 2>&1
+```
+
+Example cron job for daily quick scan of recent files:
+```
+0 3 * * * /path/to/check-malware.sh quick-scan recent-only > /dev/null 2>&1
+```
+
+Testing:
+* Test samples available in `tests/malware-samples/` directory
+* Includes critical, high, medium, and low severity examples
+* JavaScript malware patterns
+* Suspicious filename patterns
+* Legitimate WordPress code for whitelist testing
+* See `tests/malware-samples/README.md` for test execution instructions
+
 ## Todo
+
 * Use sshpass to make the remote certificates backup.
 * Make optional the verbose configuration.
 * Make an option to delete the remote and the local backups.
