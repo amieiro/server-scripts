@@ -117,6 +117,10 @@ for WP_PATH in $WP_INSTALLATIONS; do
     sudo -u "$WP_OWNER" "$WP_CLI" language plugin update --all --skip-plugins --skip-themes --path="$WP_PATH">>"$LOG_FILE" 2>&1 || echo "🚨 Error updating plugin translations for ${SITE_URL}" >>"$LOG_FILE"
     sudo -u "$WP_OWNER" "$WP_CLI" language theme update --all --skip-plugins --skip-themes --path="$WP_PATH">>"$LOG_FILE" 2>&1 || echo "🚨 Error updating theme translations for ${SITE_URL}" >>"$LOG_FILE"
 
+    # Clean WP-CLI cache
+    echo "🧹 Cleaning WP-CLI cache..." >>"$LOG_FILE"
+    sudo -u "$WP_OWNER" sh -c 'rm -rf ~/.wp-cli/cache/*' >>"$LOG_FILE" 2>&1 || echo "🚨 Error cleaning WP-CLI cache for ${SITE_URL}" >>"$LOG_FILE"
+
     # Fix permissions
     chown -R "${WP_OWNER}:${WP_GROUP}" "${WP_PATH}">>"${LOG_FILE}" 2>&1 || echo "🚨 Error setting permissions for ${SITE_URL}" >>"${LOG_FILE}"
 

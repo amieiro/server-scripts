@@ -154,7 +154,7 @@ CHECK_WORDPRESS_UPDATES_PING_USERS="${CHECK_APP_VULNERABILITIES_PING_USERS}"
 # =============================================================================
 
 # Default directory to scan if none is provided
-CHECK_MALWARE_DEFAULT_SEARCH_DIR="/home"
+CHECK_MALWARE_DEFAULT_SEARCH_DIR="${WP_UPDATE_WP_ROOT}"
 
 # Server identification (references the first definition)
 CHECK_MALWARE_SERVER_NAME="${CHECK_APP_VULNERABILITIES_SERVER_NAME}"
