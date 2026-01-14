@@ -65,7 +65,9 @@ TOTAL_SITES=0
 CRITICAL_SITES=0
 INFO_SITES=0
 NO_UPDATES_SITES=0
+CONNECTION_FAILED_SITES=0
 REPORT_LIST=""
+CONNECTION_FAILED_LIST=""
 
 # --- Find WordPress Installations ---
 echo "Finding WordPress installations in $WP_ROOT..."
@@ -85,6 +87,20 @@ while read -r wp_includes_dir; do
     
     # Get site URL (optional, might fail)
     SITE_URL=$(sudo -u "$WP_OWNER" "$WP_CLI" option get siteurl --path="$WP_PATH" 2>/dev/null || echo "")
+    
+    # Check database connection
+    DB_CHECK=$(sudo -u "$WP_OWNER" "$WP_CLI" db check --path="$WP_PATH" 2>&1)
+    if [ $? -ne 0 ]; then
+        DISPLAY_NAME="${SITE_URL:-$WP_PATH}"
+        echo "Warning: Database connection failed for $DISPLAY_NAME (Path: $WP_PATH)"
+        ((CONNECTION_FAILED_SITES++))
+        if [ -n "$SITE_URL" ]; then
+            CONNECTION_FAILED_LIST+="   • \`${WP_PATH}\` - ${SITE_URL}\n"
+        else
+            CONNECTION_FAILED_LIST+="   • \`${WP_PATH}\`\n"
+        fi
+        continue
+    fi
     
     # Initialize counters for this site
     CORE_UPDATES=0
@@ -191,7 +207,12 @@ while read -r wp_includes_dir; do
 done < <(find "$WP_ROOT" -type d -name "wp-includes" -print 2>/dev/null)
 
 # --- Build Final Report ---
-SUMMARY="*Total Sites:* $TOTAL_SITES | *Critical:* $CRITICAL_SITES | *Info:* $INFO_SITES | *Up-to-date:* $NO_UPDATES_SITES"
+SUMMARY="*Total Sites:* $TOTAL_SITES | *Critical:* $CRITICAL_SITES | *Info:* $INFO_SITES | *Up-to-date:* $NO_UPDATES_SITES | *Connection Failed:* $CONNECTION_FAILED_SITES"
+
+# Add connection failed sites to report if any
+if [ "$CONNECTION_FAILED_SITES" -gt 0 ]; then
+    REPORT_LIST+="\n\n⚠️ *Sites with connection issues ($CONNECTION_FAILED_SITES):*\n$CONNECTION_FAILED_LIST"
+fi
 
 # Determine overall status
 if [ "$CRITICAL_SITES" -gt 0 ]; then
